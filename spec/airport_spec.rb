@@ -3,49 +3,66 @@ require 'weather'
 
  
 describe Airport do
-  let(:airport) { Airport.new }
-  let(:plane) {double :plane}
+  let(:weather) {double :Weather}
+  let(:airport) { Airport.new([], 5, weather) }
+  let(:plane) {double :Plane}
   
   context 'taking off and landing' do
     it 'a plane can land' do
+    expect(weather).to receive(:conditions).and_return :sunny
     airport.land(plane)
     expect(airport.plane_count).to eq 1
     end
 
     it 'a plane can take off' do
-      airport = Airport.new([plane], 2)
+      expect(weather).to receive(:conditions).and_return :sunny
+      airport = Airport.new([plane], 2, weather)
       airport.request_take_off_to plane
       expect(airport.plane_count).to eq 0
     end
 
-    it 'a plane cannot land if the airport is full' do
-      airport = Airport.new([plane, plane], 2)
+  end
+
+  context 'an aiport must' do 
+
+    it 'knows its capacity' do
+      airport = Airport.new([plane, plane], 6, :weather)
+      expect(airport.capacity).to eq 6
+    end
+
+    it 'know its weather conditions' do
+      expect(airport.weather).to eq weather
+    end
+
+  end
+
+  context 'airport should not let' do 
+
+    it 'planes land if the airport is full' do
+      airport = Airport.new([plane, plane], 2, :weather)
       airport.land(plane)
       expect(airport.plane_count).to eq 2
     end
 
-    it 'knows its capacity' do
-      airport = Airport.new([plane, plane], 6)
-      expect(airport.capacity).to eq 6
+    it 'planes land if there is stormy weather' do 
+      expect(weather).to receive(:conditions).and_return :stormy
+      expect(airport).not_to be_clear_for_landing
     end
 
-    it 'gives permission to a plane to land' do
-      plane = double :plane 
-      expect(Random).to receive(:rand).with(1..10).and_return(1)
-      expect(airport.gives_permission_to_land(plane)).to be_true
+    it 'planes takeoff if there is stormy weather' do 
+      expect(weather).to receive(:conditions).and_return :storm
+      expect(airport).not_to be_clear_for_takeoff
     end
-
-
 
   end
-end
-    
 
-#   end
-  
-#   context 'traffic control' do
-#     it 'a plane cannot land if the airport is full' do
-#     end
-#   end
-# end
-#     
+  context 'airport should let planes land if' do 
+
+    it 'if there is sunny weather' do
+      expect(weather).to receive(:conditions).and_return :sunny
+      expect(airport).to be_clear_for_landing
+    end
+
+  end
+
+end
