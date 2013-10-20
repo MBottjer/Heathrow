@@ -1,29 +1,24 @@
 class Plane 
 
-  def initialize(status = 'flying')
-    @status = status 
+  attr_accessor :flying
+
+  def initialize
+    @flying = true 
   end
 
-  def status 
-    @status
-  end
-
-  def flying
-    @status
-  end
-
-  def not_flying
-    @status = 'landed'
+  def flying_status
+   return 'flying' if @flying == true 
+   'landed'
   end
 
   def take_off_from airport 
     airport.request_take_off_to self 
-    @status
+    flying
   end
 
   def land_at airport 
     airport.land self
-    self.not_flying 
+    @flying = false  
   end
 
 end

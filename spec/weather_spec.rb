@@ -1,14 +1,16 @@
-require 'weather'
+# require 'weather'
 
-describe Weather do 
-  let(:weather) { Weather.new }
+# describe Weather do 
+#   let(:weather) { Weather.new }
 
-context 'should at random' do
+# context 'should at random' do
 
-  it 'be mostly sunny' do
-    expect(Random).to receive(:rand).with(1..10).and_return(1)
-    expect(weather.conditions).to eq :sunny
-  end
-end
+#   it 'be mostly sunny' do
+#     Airport.any_instance.stub(:conditions) { :sunny }
+#     expect(weather.conditions).to eq :sunny
+#   end
+# end
 
-end
+# end
+
+# treated as a class first 

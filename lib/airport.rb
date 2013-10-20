@@ -2,10 +2,11 @@ require_relative 'weather'
 
 class Airport
 
-  attr_reader :capacity, :weather, :planes
+  include Weather 
 
-  def initialize(planes = [], capacity = 5, weather)
-    @weather = weather 
+  attr_reader :capacity, :planes
+
+  def initialize(planes = [], capacity = 5)
     @planes = planes
     @capacity = capacity
   end
@@ -39,7 +40,7 @@ class Airport
   end
 
   def sunny_weather?
-    weather.conditions == :sunny 
+    true if conditions == :sunny 
   end
 
 end
