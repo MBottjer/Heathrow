@@ -2,24 +2,27 @@ require_relative 'weather'
 
 class Airport
 
-  include Weather 
+  attr_reader :capacity, :planes, :weather 
 
-  attr_reader :capacity, :planes
-
-  def initialize(planes = [], capacity = 5)
+  def initialize(planes = [], capacity = 5, weather)
     @planes = planes
     @capacity = capacity
+    @weather = weather 
   end
 
   def request_take_off_to plane 
     if clear_for_takeoff?
       @planes.delete(plane)
+    else
+      puts 'storm be brewing laddy'
     end
   end
 
   def land plane
     if clear_for_landing?
-    @planes << plane unless full?
+      @planes << plane
+    else 
+      puts 'storm be brewing laddy'
     end
   end
 
@@ -32,15 +35,15 @@ class Airport
   end
 
   def clear_for_takeoff?
-    true if sunny_weather?
+    true if sunny_weather
   end
 
   def clear_for_landing?
-    true if !full? and sunny_weather? 
+    true if !full? and sunny_weather 
   end
 
-  def sunny_weather?
-    true if conditions == :sunny 
+  def sunny_weather
+    weather.conditions == :sunny 
   end
 
 end
